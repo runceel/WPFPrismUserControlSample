@@ -1,0 +1,52 @@
+﻿<Window
+    x:Class="PureWpf.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:PureWpf"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Button Command="{Binding AddCommand}" Content="Add" />
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}">
+            <ItemsControl.ItemsPanel>
+                <!--  要素の並びは Canvas で好きな座標に出せるようにする  -->
+                <ItemsPanelTemplate>
+                    <Canvas />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="local:Item">
+                    <!--  ここに表示したい UserControl を設定する。今回は別途作るのがめんどいので WPF のコントロールを直接並べてます  -->
+                    <Border
+                        Width="100"
+                        Height="100"
+                        Background="Red">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Text="{Binding Content}" />
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <!--  Canvas 上での表示位置の設定は Canvas に直接乗るコンテナに指定  -->
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                    <Setter Property="Canvas.Left" Value="{Binding X}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+    </Grid>
+</Window>
